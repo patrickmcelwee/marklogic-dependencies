@@ -19,7 +19,7 @@ RUN yum -y install /tmp/MarkLogic.rpm
 
 # Expose MarkLogic Server ports - add additional ones for your REST, etc
 # endpoints
-EXPOSE 7997 7999 8000 8001 8002 9060 9061 9062 9063 9064
+EXPOSE 7997 7999 8000 8001 8002
 
 # Define default command (which avoids immediate shutdown)
 CMD /opt/MarkLogic/bin/MarkLogic && tail -f /data/Logs/ErrorLog.txt

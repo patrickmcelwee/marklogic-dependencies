@@ -1,4 +1,4 @@
-FROM centos:centos6
+FROM centos:centos6.6
 MAINTAINER Patrick McElwee <patrick.mcelwee@marklogic.com>
 
 RUN yum -y install glibc.i686 gdb.x86_64 redhat-lsb.x86_64

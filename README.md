@@ -1,5 +1,5 @@
 This dramatically speeds up the creation of a fresh MarkLogic docker instance
-by installing all necessary dependencies. You will have to separately download
+by including all necessary dependencies. You will have to separately download
 a [MarkLogic rpm for CentOS 6](https://developer.marklogic.com/products) and
 move the rpm to the same folder as your Dockerfile.
 

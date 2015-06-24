@@ -6,7 +6,7 @@ move the rpm to the same folder as your Dockerfile.
 To use, try a Dockerfile like this:
 
 ```
-FROM patrickmcelwee/ml-prereqs:8
+FROM patrickmcelwee/marklogic-dependencies:8-latest
 MAINTAINER Patrick McElwee <patrick.mcelwee@marklogic.com>
 
 RUN yum -y install vim

@@ -39,7 +39,8 @@ background (customize it to specify the ports you need):
 That will download this image automatically and build a new image called
 `marklogic-installed:8.0-3.2`. You can then create and run a new container
 based on this image with the following command (modifying it to give the
-container a name and to change the port mappings to those you need):
+container a name and to change the port mappings to those you need - you can
+add ports not specified in the Dockerfile EXPOSE statement):
 
     docker run -d --name=name_for_this_container -p 7997:7997 -p 7999:7999 -p 8000:8000 -p 8001:8001 -p 8002:8002 -p 8040:8040 -p 8041:8041 -p 8042:8042 -p 9040:9040 -p 9070:9070 ml-installed:8.0-3.2
 

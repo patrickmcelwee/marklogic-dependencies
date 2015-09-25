@@ -31,16 +31,35 @@ CMD /opt/MarkLogic/bin/MarkLogic && tail -f /data/Logs/ErrorLog.txt
 ```
 
 Then add your [MarkLogic rpm](https://developer.marklogic.com/products) to the
-same directory. This command will build a container, and run it in the
-background (customize it to specify the ports you need):
+same directory. This command will build an image with MarkLogic installed, but
+not initiated:
 
-    docker build -t marklogic-installed:8.0-3.2 .
+    docker build -t ml-initial-install:8.0-3.2 .
+
+-t marklogic-installed:8.0-3.2 
 
 That will download this image automatically and build a new image called
 `marklogic-installed:8.0-3.2`. You can then create and run a new container
 based on this image with the following command (modifying it to give the
 container a name and to change the port mappings to those you need - you can
 add ports not specified in the Dockerfile EXPOSE statement):
+
+    docker run -d --name=initial_install -p 8001:8001 ml-initial-install:8.0-3.2
+
+Now navigate to port 8001. (Note that if you are running on Mac or Windows with
+boot2docker, you will have to discover the host IP using `boot2docker ip`).
+This will cause MarkLogic to complete installation and allow you to set up
+cluster settings and an admin user. I like to create an image immediately after
+taking these steps, so that I can create fresh images without any manual setup:
+
+    docker commit initial_install ml-installed:8.0-3.2
+
+That creates a local image named `ml-installed:8.0-3.2` that is ready to go
+with the cluster and admin user you set up! (Note that `docker commit` can be
+used to save the state of the container, even once you start adding data. This
+can be handy to create a base state to which you can easily rollback. I am not
+sure if that is possible when using external volumes, which I do not cover
+here. Feedback welcome on this point!)
 
     docker run -d --name=name_for_this_container -p 7997:7997 -p 7999:7999 -p 8000:8000 -p 8001:8001 -p 8002:8002 -p 8040:8040 -p 8041:8041 -p 8042:8042 -p 9040:9040 -p 9070:9070 ml-installed:8.0-3.2
 

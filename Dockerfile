@@ -13,7 +13,5 @@ ENV MARKLOGIC_MLCMD_PID_FILE /var/run/mlcmd.pid
 ENV MARKLOGIC_UMASK 022
 
 ENV PATH /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/opt/MarkLogic/mlcmd/bin
-ENV LD_PRELOAD /opt/MarkLogic/lib/libjemalloc.so.1
-ENV LD_LIBRARY_PATH /opt/MarkLogic/lib:/data/Lib
 
 EXPOSE 7997 7998 7999 8000 8001 8002

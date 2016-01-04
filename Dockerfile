@@ -5,6 +5,7 @@ RUN yum -y install glibc.i686 gdb.x86_64 redhat-lsb.x86_64
 
 ENV MARKLOGIC_INSTALL_DIR /opt/MarkLogic
 ENV MARKLOGIC_DATA_DIR /data
+ENV LD_LIBRARY_PATH /opt/MarkLogic/lib:/data/Lib
 
 ENV MARKLOGIC_FSTYPE ext4
 ENV MARKLOGIC_USER daemon

@@ -12,13 +12,12 @@ To create this local image with MarkLogic installed, first create a Dockerfile l
 
 ```
 FROM patrickmcelwee/marklogic-dependencies:8-latest
-MAINTAINER Patrick McElwee <patrick.mcelwee@marklogic.com>
 
 RUN yum -y install vim
 
 # Install MarkLogic
 WORKDIR /tmp
-ADD MarkLogic-8.0-4.x86_64.rpm /tmp/MarkLogic.rpm
+ADD MarkLogic-8.0-4.2.x86_64.rpm /tmp/MarkLogic.rpm
 
 RUN yum -y install /tmp/MarkLogic.rpm
 
@@ -34,7 +33,7 @@ Then add your [MarkLogic rpm](https://developer.marklogic.com/products) to the
 same directory. This command will build an image with MarkLogic installed, but
 not initiated:
 
-    docker build -t marklogic-installed:8.0-4 .
+    docker build -t marklogic-initial-install:8.0-4.2 .
 
 That will download this image automatically and build a new image called
 `marklogic-installed:8.0-4`. You can then create and run a new container
@@ -42,13 +41,14 @@ based on this image with the following command (modifying it to give the
 container a name and to change the port mappings to those you need - you can
 add ports not specified in the Dockerfile EXPOSE statement):
 
-    docker run -d --name=initial_install -p 8001:8001 marklogic-installed:8.0-4
+    docker run -d --name=initial_install -p 8001:8001 marklogic-initial-install:8.0-4.2
 
 Now navigate to port 8001. (Note that if you are running on Mac or Windows with
-boot2docker, you will have to discover the host IP using `boot2docker ip`).
-This will cause MarkLogic to complete installation and allow you to set up
-cluster settings and an admin user. I like to create an image immediately after
-taking these steps, so that I can create fresh images without any manual setup:
+docker-machine, you will have to discover the host IP using `docker-machine
+ip`). This will cause MarkLogic to complete installation and allow you to set
+up cluster settings and an admin user. I like to create an image immediately
+after taking these steps, so that I can create fresh images without any manual
+setup:
 
     docker commit initial_install ml-installed:8.0-4
 

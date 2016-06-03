@@ -17,13 +17,13 @@ RUN yum -y install vim
 
 # Install MarkLogic
 WORKDIR /tmp
-ADD MarkLogic-8.0-4.2.x86_64.rpm /tmp/MarkLogic.rpm
+ADD MarkLogic-RHEL6-8.0-5.2.x86_64.rpm /tmp/MarkLogic.rpm
 
 RUN yum -y install /tmp/MarkLogic.rpm
 
-# Expose MarkLogic Server ports - add additional ones for your REST, etc
-# endpoints
-EXPOSE 7997 7998 7999 8000 8001 8002 8040 8041 8042 9040 9041 9070 9071
+# Expose MarkLogic Server ports - plus 8040, 8041, 8042 for your REST, etc
+# endpoints - feel free to add more
+EXPOSE 7997 7998 7999 8000 8001 8002 8040 8041 8042
 
 # Define default command (which avoids immediate shutdown)
 CMD /opt/MarkLogic/bin/MarkLogic && tail -f /dev/null
@@ -33,15 +33,13 @@ Then add your [MarkLogic rpm](https://developer.marklogic.com/products) to the
 same directory. This command will build an image with MarkLogic installed, but
 not initiated:
 
-    docker build -t marklogic-initial-install:8.0-4.2 .
+    docker build -t marklogic-initial-install:8.0-5.2 .
 
 That will download this image automatically and build a new image called
-`marklogic-installed:8.0-4`. You can then create and run a new container
-based on this image with the following command (modifying it to give the
-container a name and to change the port mappings to those you need - you can
-add ports not specified in the Dockerfile EXPOSE statement):
+`marklogic-installed:8.0-5`. You can then create and run a new container
+based on this image with the following command:
 
-    docker run -d --name=initial_install -p 8001:8001 marklogic-initial-install:8.0-4.2
+    docker run -d --name=initial_install -p 8001:8001 marklogic-initial-install:8.0-5.2
 
 Now navigate to port 8001. (Note that if you are running on Mac or Windows with
 docker-machine, you will have to discover the host IP using `docker-machine
@@ -50,16 +48,24 @@ up cluster settings and an admin user. I like to create an image immediately
 after taking these steps, so that I can create fresh images without any manual
 setup:
 
-    docker commit initial_install ml-installed:8.0-4
+    docker commit initial_install ml-installed:8.0-5
 
-That creates a local image named `ml-installed:8.0-4` that is ready to go
+That creates a local image named `ml-installed:8.0-5` that is ready to go
 with the cluster and admin user you set up! (Note that `docker commit` can be
 used to save the state of the container, even once you start adding data. This
 can be handy to create a base state to which you can easily rollback. I am not
 sure if that is possible when using external volumes, which I do not cover
 here. Feedback welcome on this point!)
 
-    docker run -d --name=name_for_this_container -p 7997:7997 -p 7998:7998 -p 7999:7999 -p 8000:8000 -p 8001:8001 -p 8002:8002 -p 8040:8040 -p 8041:8041 -p 8042:8042 -p 9040:9040 -p 9041:9041 -p 9070:9070 -p 9071:9071 ml-installed:8.0-4
+Now you can cleanup that intermediate `initial_install` container:
+
+    docker stop initial_install
+    docker rm -v initial_install
+
+Now you can quickly create new containers based on your installed-MarkLogic
+image, and you will have completely isolated MarkLogic servers.
+
+    docker run -d --name=name_for_this_container -p 7997:7997 -p 7998:7998 -p 7999:7999 -p 8000:8000 -p 8001:8001 -p 8002:8002 -p 8040:8040 -p 8041:8041 -p 8042:8042 ml-installed:8.0-5
 
 When you are finished with this container, you can remove it, but remember the
 `-v` option, if you have set up a separate volume. Otherwise, the volume
